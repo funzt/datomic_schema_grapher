@@ -3,9 +3,9 @@
   :url "https://github.com/felixflores/datomic_schema_grapher"
   :license {:name "MIT License"
             :url "http://opensource.org/licenses/MIT"}
-  :dependencies [[dorothy "0.0.6"]
+  :dependencies [[org.clojure/clojure "1.8.0"]
+                 [dorothy "0.0.6"]
                  [hiccup "1.0.5"]]
   :profiles {:provided
-             {:dependencies [[org.clojure/clojure "1.8.0"]
-                             ;; user must provide her own datomic
+             {:dependencies [;; user must provide her own datomic
                              [com.datomic/datomic-free "0.9.5350"]]}})
