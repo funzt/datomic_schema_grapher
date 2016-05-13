@@ -5,6 +5,7 @@
   (:import javax.swing.JFrame))
 
 (defn graph-datomic-db
+  "Render a nice graphviz of your Datomic schema"
   [db & {:keys [save-as no-display exit-on-close]}]
   (let [schema (schema db)
         references (references db)]
@@ -18,6 +19,7 @@
           (while true (Thread/sleep 500)))))))
 
 (defn graph-datomic
-  "Render a nice graphviz of your Datomic schema"
-  [uri & {:keys [save-as no-display exit-on-close]}]
-  (graph-datomic-db (d/db (d/connect uri))))
+  "Like graph-datomic-db, but takes an uri instead of db."
+  {:deprecated true}
+  [uri & opts]
+  (apply graph-datomic-db (d/db (d/connect uri)) opts))
