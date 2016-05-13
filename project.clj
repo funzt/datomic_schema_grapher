@@ -8,4 +8,9 @@
                  [hiccup "1.0.5"]]
   :profiles {:provided
              {:dependencies [;; user must provide her own datomic
-                             [com.datomic/datomic-free "0.9.5350"]]}})
+                             [com.datomic/datomic-free "0.9.5350"]]}
+             :dev
+             {:src-paths ["src" "dev"]}
+
+             :repl
+             {:repl-options {:init-ns dev}}})
