@@ -26,19 +26,28 @@
       label)))
 
 (defn node-label
-  [attributes]
-  (let [entity-name (namespace (:db/ident (first attributes)))]
-    (html [:table {:port entity-name :border 0 :color light-grey :cellborder 1 :cellspacing 0}
-           [:tr [:td {:bgcolor "gray"} entity-name]]
-           (for [attribute attributes
-                 :let [attr-name (name (:db/ident attribute))]]
-             [:tr [:td (when (is-a-ref? attribute) {:port attr-name}) (attr-row-label attribute)]])])))
+  [entity-name attributes]
+  (html
+   [:table {:port entity-name
+            :border 0
+            :color light-grey
+            :cellborder 1
+            :cellspacing 0}
+    [:tr
+     [:td {:bgcolor "gray"}
+      entity-name]]
+    (for [attribute attributes
+          :let [attr-name (name (:db/ident attribute))]]
+      [:tr
+       [:td (if (is-a-ref? attribute) {:port attr-name})
+        (attr-row-label attribute)]])]))
 
 (defn dot-nodes
   "Create dorothy nodes for schema."
   [schema]
   (for [[entity-name attributes] (group-by-ident-ns schema)]
-    [entity-name {:label (node-label (sort-by :db/ident attributes))}]))
+    [entity-name {:label (node-label entity-name
+                                     (sort-by :db/ident attributes))}]))
 
 (defn circular-relationship?
   [[root dest-label _]]
