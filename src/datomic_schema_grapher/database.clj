@@ -31,13 +31,8 @@
 
 (defn references
   [db]
-  (let [ref-attrs (->> (schema db)
-                       (filter (comp #{:db.type/ref}
-                                     :db/valueType)))]
-    (->> (for [ref-attr ref-attrs]
-           (interleave (repeat (:db/ident ref-attr))
-                       (ref-entities db (:db/ident ref-attr))
-                       (repeat (name (:db/cardinality ref-attr)))))
-         flatten
-         (partition 3))))
+  (for [{:keys [db/ident db/valueType db/cardinality]} (schema db)
+        :when (= valueType :db.type/ref)
+        referred-ns (ref-entities db ident)]
+    [ident referred-ns (name cardinality)]))
 
