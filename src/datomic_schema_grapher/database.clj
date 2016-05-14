@@ -17,17 +17,16 @@
 (defn ref-entities
   "Returns all entities the references a given datomic attribute."
   [db attr-name]
-  (->>  (d/q '[:find ?ref-name
+  (into #{}
+        (map namespace)
+        (d/q '[:find [?ref-name ...]
                :in $ ?attr-name
                :where
                [_ ?attr-name ?ref]
                [?ref ?ref-attr]
                [?ref-attr :db/ident ?ref-name]]
              db
-             attr-name)
-       (apply concat)
-       (map namespace)
-       (set)))
+             attr-name)))
 
 (defn references
   [db]
