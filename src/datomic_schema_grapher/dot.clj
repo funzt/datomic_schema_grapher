@@ -20,7 +20,7 @@
 
 (defn attr-row-label
   [attribute]
-  (let [label (str (name (:db/ident attribute)) " : " (name (:db/valueType attribute)))]
+  (let [label (str (name (:db/ident attribute)))]
     (if (is-identifier? attribute)
       (html [:font {:color "red"} label])
       label)))
@@ -35,12 +35,15 @@
             :cellspacing 0}
     [:tr
      [:td {:bgcolor "gray"}
-      entity-name]]
+      entity-name]
+     [:td
+      "valueType"]]
     (for [attribute attributes
           :let [attr-name (name (:db/ident attribute))]]
       [:tr
        [:td (if (is-a-ref? attribute) {:port attr-name})
-        (attr-row-label attribute)]])]))
+        (attr-row-label attribute)]
+       [:td (name (:db/valueType attribute))]])]))
 
 (defn dot-nodes
   "Create dorothy nodes for schema."
