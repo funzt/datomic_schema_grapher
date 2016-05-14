@@ -15,18 +15,19 @@
        (map #(d/entity db %))))
 
 (defn ref-entities
-  "Returns all entities the references a given datomic attribute."
-  [db attr-name]
+  "Returns a set of the names of all attributes that are used by
+  entities referred to per attr"
+  [db attr]
   (into #{}
         (map namespace)
         (d/q '[:find [?ref-name ...]
-               :in $ ?attr-name
+               :in $ ?attr
                :where
-               [_ ?attr-name ?ref]
+               [_ ?attr ?ref]
                [?ref ?ref-attr]
                [?ref-attr :db/ident ?ref-name]]
              db
-             attr-name)))
+             attr)))
 
 (defn references
   [db]
