@@ -35,9 +35,10 @@
              [:tr [:td (when (is-a-ref? attribute) {:port attr-name}) (attr-row-label attribute)]])])))
 
 (defn dot-nodes
+  "Create dorothy nodes for schema."
   [schema]
-  (for [[entity-name attributes] (group-as-entities schema)]
-    [entity-name {:label (node-label (sort #(compare (first %1) (first %2)) attributes))}]))
+  (for [[entity-name attributes] (group-by-ident-ns schema)]
+    [entity-name {:label (node-label (sort-by :db/ident attributes))}]))
 
 (defn circular-relationship?
   [[root dest-label _]]
