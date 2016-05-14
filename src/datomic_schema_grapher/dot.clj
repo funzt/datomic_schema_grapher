@@ -1,5 +1,5 @@
 (ns datomic-schema-grapher.dot
-  (:require [clojure.string :refer (split join)]
+  (:require [clojure.string :as str :refer (split join)]
             [hiccup.core :refer (html)]
             [dorothy.core :refer (subgraph node-attrs digraph dot show! save! graph-attrs)]))
 
@@ -25,6 +25,33 @@
       (html [:font {:color "red"} label])
       label)))
 
+(defn- word-wrap
+  "Word wrap a string after n characters.  Lines of a single word
+  longer than n are not wrapped."
+  [s n]
+  (loop [[word & nwords :as words] (str/split s #" ")
+         linec 0
+         line []
+         lines []]
+    (if word
+      (let [wordc (count word)
+            next-linec (cond-> (+ linec wordc)
+                         ;;; if there already was a word in this line,
+                         ;;; we need to count a whitespace
+                         (pos? linec) (inc))]
+        (if (> next-linec (max n wordc))
+          (recur words
+                 0
+                 []
+                 (conj lines line))
+          (recur nwords
+                 next-linec
+                 (conj line word)
+                 lines)))
+      (->> (conj lines line)
+           (map (partial str/join " "))
+           (interpose [:br])))))
+
 (defn node-label
   [entity-name attributes]
   (html
@@ -37,13 +64,18 @@
      [:td {:bgcolor "gray"}
       entity-name]
      [:td
-      "valueType"]]
+      "valueType"]
+     [:td
+      "doc"]]
     (for [attribute attributes
           :let [attr-name (name (:db/ident attribute))]]
       [:tr
        [:td (if (is-a-ref? attribute) {:port attr-name})
         (attr-row-label attribute)]
-       [:td (name (:db/valueType attribute))]])]))
+       [:td (name (:db/valueType attribute))]
+       [:td
+        (word-wrap (:db/doc attribute)
+                   30)]])]))
 
 (defn dot-nodes
   "Create dorothy nodes for schema."
