@@ -12,7 +12,7 @@
               (not [?tx :db/txInstant ?date-zero])]
             database
             (Date. 0))
-       (map #(d/entity database (first %)))))
+       (map #(d/entity database %))))
 
 (defn ref-entities
   "Returns all entities the references a given datomic attribute."
