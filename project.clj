@@ -10,7 +10,7 @@
              {:dependencies [;; user must provide her own datomic
                              [com.datomic/datomic-free "0.9.5350"]]}
              :dev
-             {:src-paths ["src" "dev"]
+             {:source-paths ["src" "dev"]
               :dependencies [[org.clojure/tools.namespace "0.2.11"]]}
 
              :repl
