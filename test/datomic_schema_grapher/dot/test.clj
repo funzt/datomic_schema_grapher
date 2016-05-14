@@ -15,9 +15,9 @@
                :db/cardinality :db.cardinality.one
                :db/valueType :db.type/ref}])
 
-(deftest test-group-as-entities
-  (testing "group-as-entities"
-    (let [entities (group-as-entities schema1)]
+(deftest test-group-by-ident-ns
+  (testing "group-by-ident-ns"
+    (let [entities (group-by-ident-ns schema1)]
       (are [x y] (= (map :db/ident x) y)
            (entities "entity1") '(:entity1/attr1 :entity1/attr2)
            (entities "entity2") '(:entity2/attr1 :entity2/entity1)))))

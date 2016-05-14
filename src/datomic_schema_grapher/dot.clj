@@ -6,9 +6,9 @@
 (def light-grey "#808080")
 (def edge-colors ["#441C14" "#15484C" "#257580" "#6E7D2C" "#CED796"])
 
-(defn group-as-entities
+(defn group-by-ident-ns
   [schema]
-  (group-by #(namespace (:db/ident %)) schema))
+  (group-by (comp namespace :db/ident) schema))
 
 (defn is-a-ref?
   [attr]
