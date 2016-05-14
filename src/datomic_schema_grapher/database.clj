@@ -3,8 +3,7 @@
   (:import java.util.Date))
 
 (defn schema
-  "Returns all user defined datomic attribute as entities,
-  grouped by their common namespace."
+  "Returns all user defined datomic attribute as entities."
   [database]
   (->> (d/q '[:find [?attr ...]
               :in $ ?date-zero
