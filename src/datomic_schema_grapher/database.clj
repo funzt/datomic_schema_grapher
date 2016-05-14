@@ -6,12 +6,11 @@
   "Returns all user defined datomic attribute as entities,
   grouped by their common namespace."
   [database]
-  (->> (d/q '[:find ?attr ?name
+  (->> (d/q '[:find [?attr ...]
               :in $ ?date-zero
               :where
               [_ :db.install/attribute ?attr ?tx]
-              (not [?tx :db/txInstant ?date-zero])
-              [?attr :db/ident ?name]]
+              (not [?tx :db/txInstant ?date-zero])]
             database
             (Date. 0))
        (map #(d/entity database (first %)))))
