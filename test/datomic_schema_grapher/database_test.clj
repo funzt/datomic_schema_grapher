@@ -31,7 +31,7 @@
 
 (deftest test-referencing-namespaces
   (testing "Returns a collection of referenced namespaces"
-    (are [x y] (= (db/ref-entities x *db*) y)
+    (are [x y] (= (db/ref-entities *db* x) y)
       :entity1/self #{"entity1"}
       :entity1/multi #{"entity1" "entity2"}
       :entity1/entity2 #{"entity2"}

@@ -16,7 +16,7 @@
 
 (defn ref-entities
   "Returns all entities the references a given datomic attribute."
-  [attr-name db]
+  [db attr-name]
   (->>  (d/q '[:find ?ref-name
                :in $ ?attr-name
                :where
@@ -36,7 +36,7 @@
                        :db.type/ref)]
     (->> (for [ref-attr ref-attrs]
            (interleave (repeat (:db/ident ref-attr))
-                       (ref-entities (:db/ident ref-attr) db)
+                       (ref-entities db (:db/ident ref-attr))
                        (repeat (name (:db/cardinality ref-attr)))))
          flatten
          (partition 3))))
