@@ -66,12 +66,6 @@
            [["entity1:multi" "entity1_ref" {:color "#441C14", :arrowhead "crow"}]
             ["entity1:self" "entity1_ref" {:color "#15484C", :arrowhead "crow"}]]))))
 
-(deftest test-node-label
-  (testing "node-label"
-    (are [x y] (= (node-label [x]) y)
-         attr-ref "<table border=\"0\" cellborder=\"1\" cellspacing=\"0\" color=\"#808080\" port=\"entity1\"><tr><td bgcolor=\"gray\">entity1</td></tr><tr><td port=\"reference\">reference : ref</td></tr></table>"
-         attr-string "<table border=\"0\" cellborder=\"1\" cellspacing=\"0\" color=\"#808080\" port=\"entity1\"><tr><td bgcolor=\"gray\">entity1</td></tr><tr><td>attr1 : string</td></tr></table>")))
-
 (deftest test-dot-relationship
   (testing "Relationships are properly mapped"
     (are [x y] (= (dot-relationship x) y)
