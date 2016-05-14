@@ -4,39 +4,39 @@
 
 (defn schema
   "Returns all user defined datomic attribute as entities."
-  [database]
+  [db]
   (->> (d/q '[:find [?attr ...]
               :in $ ?date-zero
               :where
               [_ :db.install/attribute ?attr ?tx]
               (not [?tx :db/txInstant ?date-zero])]
-            database
+            db
             (Date. 0))
-       (map #(d/entity database %))))
+       (map #(d/entity db %))))
 
 (defn ref-entities
   "Returns all entities the references a given datomic attribute."
-  [attr-name database]
+  [attr-name db]
   (->>  (d/q '[:find ?ref-name
                :in $ ?attr-name
                :where
                [_ ?attr-name ?ref]
                [?ref ?ref-attr]
                [?ref-attr :db/ident ?ref-name]]
-             database
+             db
              attr-name)
        (apply concat)
        (map namespace)
        (set)))
 
 (defn references
-  [database]
-  (let [ref-attrs (->> (schema database)
+  [db]
+  (let [ref-attrs (->> (schema db)
                        (group-by :db/valueType)
                        :db.type/ref)]
     (->> (for [ref-attr ref-attrs]
            (interleave (repeat (:db/ident ref-attr))
-                       (ref-entities (:db/ident ref-attr) database)
+                       (ref-entities (:db/ident ref-attr) db)
                        (repeat (name (:db/cardinality ref-attr)))))
          flatten
          (partition 3))))
