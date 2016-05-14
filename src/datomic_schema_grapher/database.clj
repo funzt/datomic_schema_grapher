@@ -15,7 +15,7 @@
        (map #(d/entity db %))))
 
 (defn ref-entities
-  "Returns a set of the names of all attributes that are used by
+  "Returns a set of the namespaces of all attributes that are used by
   entities referred to per attr"
   [db attr]
   (into #{}
