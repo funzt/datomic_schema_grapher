@@ -16,7 +16,7 @@
 
 (defn ref-entities
   "Returns a set of the namespaces of all attributes that are used by
-  entities referred to per attr"
+  entities referred to per attr."
   [db attr]
   (into #{}
         (map namespace)
