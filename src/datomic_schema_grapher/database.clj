@@ -32,8 +32,8 @@
 (defn references
   [db]
   (let [ref-attrs (->> (schema db)
-                       (group-by :db/valueType)
-                       :db.type/ref)]
+                       (filter (comp #{:db.type/ref}
+                                     :db/valueType)))]
     (->> (for [ref-attr ref-attrs]
            (interleave (repeat (:db/ident ref-attr))
                        (ref-entities db (:db/ident ref-attr))
