@@ -30,6 +30,9 @@
              attr)))
 
 (defn references
+  "Return tuples [attr-ident referred-ns card] where referred-ns is
+  the namespace of at least one attribute that an entity has that is
+  referenced via attr-ident."
   [db]
   (for [{:keys [db/ident db/valueType db/cardinality]} (schema db)
         :when (= valueType :db.type/ref)
