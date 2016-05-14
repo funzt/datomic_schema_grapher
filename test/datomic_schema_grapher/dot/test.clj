@@ -41,9 +41,9 @@
          attr-ref true
          attr-string false)))
 
-(deftest test-is-unique?
-  (testing "is-unique?"
-    (are [x y] (= (is-unique? x) y)
+(deftest test-is-identifier?
+  (testing "is-identifier?"
+    (are [x y] (= (is-identifier? x) y)
          attr-unique true
          attr-string false)))
 

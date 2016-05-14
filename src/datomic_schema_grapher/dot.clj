@@ -14,14 +14,14 @@
   [attr]
   (= (:db/valueType attr) :db.type/ref))
 
-(defn is-unique?
+(defn is-identifier?
   [attr]
   (= (:db/unique attr) :db.unique/identity))
 
 (defn attr-row-label
   [attribute]
   (let [label (str (name (:db/ident attribute)) " : " (name (:db/valueType attribute)))]
-    (if (is-unique? attribute)
+    (if (is-identifier? attribute)
       (html [:font {:color "red"} label])
       label)))
 
