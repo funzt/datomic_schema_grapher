@@ -101,15 +101,10 @@
 
 (defn add-ref-colors
   [ref-nodes]
-  (loop [nodes []
-         colors (cycle edge-colors)
-         ref-nodes ref-nodes]
-    (let [[root-label dest-ref-label edge-attrs] (first ref-nodes)]
-      (if (not-empty ref-nodes)
-        (recur (conj nodes [root-label dest-ref-label (merge edge-attrs {:color (first colors)})])
-               (rest colors)
-               (rest ref-nodes))
-        nodes))))
+  (map (fn [[root-label dest-ref-label edge-attrs] color]
+         [root-label dest-ref-label (merge edge-attrs {:color color})])
+       ref-nodes
+       (cycle edge-colors)))
 
 (defn dot-relationship
   [[root dest-label cardinality :as relationship]]
