@@ -22,8 +22,8 @@
                     (io/resource)
                     (io/reader))))
 
-(defn create-basis-db []
-  (let [db0 (-> (doto "datomic:mem://basis-db"
+(defn create-test-db [url schema]
+  (let [db0 (-> (doto url
                   (d/delete-database)
                   (d/create-database))
                 (d/connect)
@@ -31,9 +31,59 @@
     (reduce (fn [db tx]
               (:db-after (d/with db tx)))
             db0
-            (concat schema fixtures))))
+            schema)))
 
-(def basis-db
-  (create-basis-db))
+(def db-1
+  (create-test-db "datomic:mem://test-db-1"
+                  (concat schema fixtures)))
+
+(def db-2
+  (create-test-db
+   "datomic:mem://test-db-1"
+   [ ;; Schema
+    [{:db/id (d/tempid :db.part/db)
+      :db/ident :shop/name
+      :db/valueType :db.type/string
+      :db/cardinality :db.cardinality/one
+      :db.install/_attribute :db.part/db}
+
+     {:db/id (d/tempid :db.part/db)
+      :db/ident :shop/customers
+      :db/valueType :db.type/ref
+      :db/cardinality :db.cardinality/many
+      :db.install/_attribute :db.part/db}
+
+     {:db/id (d/tempid :db.part/db)
+      :db/ident :shop/owner
+      :db/valueType :db.type/ref
+      :db/cardinality :db.cardinality/one
+      :db.install/_attribute :db.part/db}
+
+     {:db/id (d/tempid :db.part/db)
+      :db/ident :customer/email
+      :db/valueType :db.type/string
+      ;; :db/unique :db.unique/identity
+      :db/cardinality :db.cardinality/one
+      :db.install/_attribute :db.part/db}]
+    ;; Some-data
+    [{:db/id (d/tempid :db.part/user -1)
+      :customer/email "customer1@gmail.com"}
+     {:db/id (d/tempid :db.part/user -2)
+      :customer/email "customer2@yahoo.com"}
+     {:db/id (d/tempid :db.part/user -3)
+      :customer/email "customer3@hotmail.com"}
+     {:db/id (d/tempid :db.part/user)
+      :shop/name "Permanent Shop"
+      :shop/owner (d/tempid :db.part/user -3)
+      :shop/customers [(d/tempid :db.part/user -1)
+                       (d/tempid :db.part/user -2)]}
+     {:db/id (d/tempid :db.part/user)
+      :shop/name "Orange Shop"
+      :shop/customers [(d/tempid :db.part/user -1)
+                       (d/tempid :db.part/user -2)
+                       (d/tempid :db.part/user -3)]}
+     {:db/id (d/tempid :db.part/user)
+      :shop/name "Tasteful Shop"}]]))
+
 
 #_(r/refresh)
