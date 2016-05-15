@@ -64,7 +64,9 @@
      [:td {:bgcolor "gray"}
       entity-name]
      [:td
-      "valueType"]
+      "type"]
+     [:td
+      "card"]
      [:td
       "doc"]]
     (for [attribute attributes
@@ -73,6 +75,10 @@
        [:td (if (is-a-ref? attribute) {:port attr-name})
         (attr-row-label attribute)]
        [:td (name (:db/valueType attribute))]
+       [:td (if (= (:db/cardinality attribute)
+                   :db.cardinality/one)
+              "1"
+              "n")]
        [:td
         (word-wrap (:db/doc attribute)
                    30)]])]))
