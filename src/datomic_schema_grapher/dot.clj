@@ -97,7 +97,10 @@
 
 (defn ref-node
   [[root dest-label _]]
-  [(str dest-label "_ref") {:label dest-label :shape "rectangle" :style "dotted,rounded" :color light-grey}])
+  [(str dest-label "_ref") {:label dest-label
+                            :shape "rectangle"
+                            :style "dotted,rounded"
+                            :color light-grey}])
 
 (defn add-ref-colors
   [ref-nodes]
