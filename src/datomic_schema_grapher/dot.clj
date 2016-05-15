@@ -72,14 +72,16 @@
     (for [attribute attributes
           :let [attr-name (name (:db/ident attribute))]]
       [:tr
-       [:td (if (is-a-ref? attribute) {:port attr-name})
-        (attr-row-label attribute)]
-       [:td (name (:db/valueType attribute))]
-       [:td (if (= (:db/cardinality attribute)
-                   :db.cardinality/one)
-              "1"
-              "n")]
        [:td
+        (attr-row-label attribute)]
+       [:td
+        (name (:db/valueType attribute))]
+       [:td
+        (if (= (:db/cardinality attribute)
+               :db.cardinality/one)
+          "1"
+          "n")]
+       [:td  (if (is-a-ref? attribute) {:port attr-name})
         (word-wrap (:db/doc attribute)
                    30)]])]))
 
@@ -107,7 +109,9 @@
 (defn add-ref-colors
   [ref-nodes]
   (map (fn [[root-label dest-ref-label edge-attrs] color]
-         [root-label dest-ref-label (merge edge-attrs {:color color})])
+         [root-label dest-ref-label (merge edge-attrs
+                                           {:color color
+                                            :fontcolor color})])
        ref-nodes
        (cycle edge-colors)))
 
@@ -115,7 +119,11 @@
   [[root dest-label cardinality :as relationship]]
   (let [root-label (str (namespace root) ":" (name root))
         dest-ref-label (str dest-label "_ref")
-        edge-attrs {:arrowhead (if (= cardinality "one") "tee" "crow")}]
+        edge-attrs {;; :arrowhead (if (= cardinality "one") "tee" "crow")
+                    :label (if (= cardinality "one")
+                             "1:1"
+                             "1:n")
+                    }]
     (if (circular-relationship? relationship)
       [root-label dest-ref-label edge-attrs]
       [root-label (str dest-label ":" dest-label) edge-attrs])))
