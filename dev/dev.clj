@@ -2,12 +2,15 @@
   (:require [datomic.api :as d]
             [clojure.java.io :as io]
             [datomic-schema-grapher.core :as dsgc]
+            [datomic-schema-grapher.database :as db]
+            [datomic-schema-grapher.dot :as dot]
             [clojure.tools.namespace.repl :as r])
   (:import [datomic Util]))
 
 (r/set-refresh-dirs "src/utils"
                     "src/datomic-schema-grapher"
-                    "test")
+                    "test"
+                    "dev")
 
 (def schema
   (Util/readAll (-> "datomic_schema_grapher/database/schema.edn"
@@ -33,4 +36,4 @@
 (def basis-db
   (create-basis-db))
 
-(r/refresh)
+#_(r/refresh)
