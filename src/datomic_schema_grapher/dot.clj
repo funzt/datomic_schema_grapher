@@ -95,7 +95,9 @@
   (= (namespace root) dest-label))
 
 
-(defn ref-node
+(defn shadow-ref-node
+  "Dotted node used as destination for entities that refer to their
+  own type because cycle arrows don't look good with ports"
   [[root dest-label _]]
   [(str dest-label "_ref") {:label dest-label
                             :shape "rectangle"
@@ -121,14 +123,17 @@
 (defn dot-relationships
   [relationships]
   (concat (add-ref-colors (map dot-relationship relationships))
-          (map ref-node (filter circular-relationship? relationships))))
+          (map shadow-ref-node (filter circular-relationship? relationships))))
+
+(defn to-digraph-statements [schema relationships]
+  (concat [(node-attrs {:shape "plaintext"})]
+          (dot-nodes schema)
+          (when (not-empty relationships)
+            (dot-relationships relationships))))
 
 (defn to-dot
   [schema relationships]
-  (dot (digraph (concat [(node-attrs {:shape "plaintext"})]
-                        (dot-nodes schema)
-                        (when (not-empty relationships)
-                          (dot-relationships relationships))))))
+  (dot (digraph (to-digraph-statements schema relationships))))
 
 (defn show
   [schema relationships]
