@@ -82,7 +82,7 @@
           "1"
           "n")]
        [:td  (if (is-a-ref? attribute) {:port attr-name})
-        (word-wrap (:db/doc attribute)
+        (word-wrap (:db/doc attribute "-")
                    30)]])]))
 
 (defn dot-nodes
