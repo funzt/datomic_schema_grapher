@@ -82,8 +82,10 @@
           "1"
           "n")]
        [:td  (if (is-a-ref? attribute) {:port attr-name})
-        (word-wrap (:db/doc attribute "-")
-                   30)]])]))
+        (->> (str/split-lines (:db/doc attribute "-"))
+             (map #(word-wrap % 30))
+             (interpose [[:br]])
+             (apply concat))]])]))
 
 (defn dot-nodes
   "Create dorothy nodes for schema."
