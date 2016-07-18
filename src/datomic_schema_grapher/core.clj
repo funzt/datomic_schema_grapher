@@ -15,7 +15,7 @@
       (let [jframe (dot/show schema references)]
         (when exit-on-close
           ;; mainly for use with the lein plugin
-          (.setDefaultCloseOperation jframe JFrame/EXIT_ON_CLOSE)
+          (.setDefaultCloseOperation ^javax.swing.JFrame jframe JFrame/EXIT_ON_CLOSE)
           (while true (Thread/sleep 500)))))))
 
 (defn graph-datomic
