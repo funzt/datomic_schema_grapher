@@ -1,4 +1,4 @@
-(defproject org.funzt/datomic-schema-grapher "0.1.0-SNAPSHOT"
+(defproject org.funzt/datomic-schema-grapher "0.1.1-alpha1"
   :description "A library and lein plugin for graphing the datomic schema."
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
