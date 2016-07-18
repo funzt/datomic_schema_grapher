@@ -8,7 +8,7 @@
 
 (defn group-by-ident-ns
   [schema]
-  (group-by (comp namespace :db/ident) schema))
+  (group-by (comp (some-fn namespace name) :db/ident) schema))
 
 (defn is-a-ref?
   [attr]
@@ -91,8 +91,9 @@
   "Create dorothy nodes for schema."
   [schema]
   (for [[entity-name attributes] (group-by-ident-ns schema)]
-    [entity-name {:label (node-label entity-name
-                                     (sort-by :db/ident attributes))}]))
+    [entity-name
+     {:label (node-label entity-name
+                         (sort-by :db/ident attributes))}]))
 
 (defn circular-relationship?
   [[root dest-label _]]
