@@ -19,7 +19,7 @@
   entities referred to per attr."
   [db attr]
   (into #{}
-        (map namespace)
+        (map (some-fn namespace name))
         (d/q '[:find [?ref-name ...]
                :in $ ?attr
                :where
@@ -38,4 +38,3 @@
         :when (= valueType :db.type/ref)
         referred-ns (ref-entities db ident)]
     [ident referred-ns (name cardinality)]))
-
